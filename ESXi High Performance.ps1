@@ -13,7 +13,7 @@ $hosts | Select Name,@{ N="CurrentPolicy"; E={$_.ExtensionData.config.PowerSyste
 # 3=LowPower (low)
 # 4=Custom (custom)
 
-#Loop to make the change
+#Loop to make the change 
 foreach ($h in $hosts)
 {
 $view = ($h | Get-View)
