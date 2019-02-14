@@ -1,4 +1,15 @@
-﻿
+#####################################
+# VCF Host Prep Script              #
+#                                   #
+# Note: this assumes you have       #
+# already assigned DNS entries and  #
+# management IPs to the host and    #
+# the hosts are connected to the    #
+# network and are accessible.       #
+#                                   #
+#####################################
+
+
 $pass = "VMware1!"
 $hostfile = "C:\VCFHosts.txt"
 $ntpone = "time1.domain.com"
