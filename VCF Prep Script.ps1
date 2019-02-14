@@ -18,7 +18,6 @@ $ntptwo = "time2.domain.com"
 #DO NOT CHANGE BELOW THIS LINE#
 $hosts = Get-Content -Path $hostfile
 ForEach ($esx in $hosts) {
-    #(get-vmhost $h | get-view).ExitLockdownMode() # To DISABLE Lockdown Mode
     Write-Host "Connecting to $esx" -ForegroundColor Green 
     Connect-VIServer -Server $esx -User root -Password $pass
 
