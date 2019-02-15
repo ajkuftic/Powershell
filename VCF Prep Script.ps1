@@ -26,6 +26,10 @@ ForEach ($esx in $hosts) {
     Write-Host "Connecting to $esx" -ForegroundColor Green 
     Connect-VIServer -Server $esx -User root -Password $pass
 
+    Write-Host "Configuring VM Network to VLAN $vlan on $esx" -ForegroundColor Green
+    $vlan = Get-VirtualPortGroup -Name "Management Network" 
+    Get-VirtualPortGroup -Name "VM Network" | Set-VirtualPortgroup -VLanID $vlan.VLanId
+    
     Write-Host "Configuring DNS and Domain Name on $esx" -ForegroundColor Green
     Get-VMHostNetwork -VMHost $esx | Set-VMHostNetwork -DomainName $domainname -DNSAddress $dnsone , $dnstwo -Confirm:$false
 
