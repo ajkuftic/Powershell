@@ -42,11 +42,27 @@ ForEach ($esx in $hosts) {
     Write-Host "Configuring SSH Client Policy on $esx" -ForegroundColor Green 
     Get-VMHostService -VMHost $esx | where {$_.Key -eq "TSM-SSH"} | Set-VMHostService -policy "on" -Confirm:$false 
       
-    Write-Host "Adding NTP Server $ntpone on $esx" -ForegroundColor Green 
-    Add-VMHostNTPServer -NtpServer $ntpone -VMHost $esx -Confirm:$false
+    Write-Host "Collecting NTP Servers on $esx" -ForegroundColor Green 
+    $allNTPList = Get-VMHostNtpServer -VMHost $esx    
 
-    Write-Host "Adding NTP Server $ntptwo on $esx" -ForegroundColor Green 
-    Add-VMHostNTPServer -NtpServer $ntptwo -VMHost $esx -Confirm:$false
+    if ($allNTPList -contains $ntpone -AND $allntplist -contains $ntptwo) {
+        Write-Host "NTP Server $ntpone and $ntptwo already exist on $esx" -ForegroundColor Green
+    }   
+    elseif ($ntpone -notin $allNTPList -AND $allntplist -contains $ntptwo) {
+        Write-Host "Adding NTP Server $ntpone on $esx" -ForegroundColor Green 
+        Add-VMHostNTPServer -NtpServer $ntpone -VMHost $esx -Confirm:$false
+    }
+    elseif ($ntptwo -notin $allNTPList -AND $allntplist -contains $ntpone) {
+        Write-Host "Adding NTP Server $ntptwo on $esx" -ForegroundColor Green 
+        Add-VMHostNTPServer -NtpServer $ntptwo -VMHost $esx -Confirm:$false 
+    }
+    else {
+        Write-Host "Adding NTP Server $ntpone on $esx" -ForegroundColor Green 
+        Add-VMHostNTPServer -NtpServer $ntpone -VMHost $esx -Confirm:$false
+
+        Write-Host "Adding NTP Server $ntptwo on $esx" -ForegroundColor Green 
+        Add-VMHostNTPServer -NtpServer $ntptwo -VMHost $esx -Confirm:$false
+    }
 
     Write-Host "Configuring NTP Client Policy on $esx" -ForegroundColor Green 
     Get-VMHostService -VMHost $esx | where{$_.Key -eq "ntpd"} | Set-VMHostService -policy "on" -Confirm:$false 
