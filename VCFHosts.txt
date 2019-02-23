@@ -1,0 +1,4 @@
+host1.domain.com
+host2.domain.com
+host3.domain.com
+host4.domain.com
