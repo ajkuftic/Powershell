@@ -1,11 +1,18 @@
+# Set variables
 $report = @()
-$vcs = Get-Content -Path "z:\memvcenters.txt"
+
+# Pull in vCenters from list
+$vcs = Get-Content -Path "C:\memvcenters.txt"
+
+# Collect credentials to use across the vCenters
 $creds = Get-Credential
 
+# Connect to vCenter
 foreach ($vc in $vcs)
 {
     Connect-viserver $vc -Credential $creds
-    
+
+# Pull VM data
 foreach($vm in Get-View -ViewType Virtualmachine){
  
     $vms = "" | Select-Object VMName,VMHost,Compressed,Ballooned,Swapped
@@ -17,8 +24,14 @@ foreach($vm in Get-View -ViewType Virtualmachine){
  $vms.Swapped = $vm.Summary.QuickStats.SwappedMemory
     $Report += $vms
 }
-$Report | export-csv -Path "z:\$vc-compressmem.csv" 
+
+# Generate report
+$Report | export-csv -Path "C:\$vc-compressmem.csv" 
+
+# Disconnect from vCenter
 Disconnect-VIServer -Confirm:$false
+
+# Clear array so it doesn't continually append
 $report = @()
 }
 
