@@ -22,7 +22,9 @@ foreach($vm in Get-View -ViewType Virtualmachine){
     $vms.Compressed = $vm.Summary.QuickStats.CompressedMemory
  $vms.Ballooned = $vm.Summary.QuickStats.BalloonedMemory
  $vms.Swapped = $vm.Summary.QuickStats.SwappedMemory
+    if ($vms.Compressed){
     $Report += $vms
+    }
 }
 
 # Generate report
