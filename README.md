@@ -1,2 +1,2 @@
 # Powershell
-My collection of various helpful Powershell scripts.
+My collection of various helpful Powershell scripts!
